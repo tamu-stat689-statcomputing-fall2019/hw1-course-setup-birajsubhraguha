@@ -9,7 +9,7 @@ beta = rep(2,p) # true vector of coefficients
 X = matrix(rnorm(n*p), n, p) # n by p matrix of predictors
 
 # [ToDo] Use generateY function to generate Y
-generateY=function(n,sigma,beta,X){
+generateY=function(X, beta, sigma, seed = 5832652){
   Y=numeric(0)
   for(i in 1:n){
     
@@ -34,22 +34,15 @@ calculateBeta=function(Y,X){
 
 # [ToDo] Use calculateMSE to assess the estimation error measured by squared eucledian distance - ||beta - beta_LS||_2^2
 calculateMSE=function(beta, beta_LS){
-  
-  # since beta_LS is unbiased for beta, MSE = trace(Var)
-  X1=t(X)
-  M=solve(X1%*%X)
-  tr=0
-  for (i in 1:p) {
-    tr=tr+M[i,i]
-  }
-  return((sigma^2)*tr)
+  MSE=crossprod(beta-beta_LS)
+  return(MSE)
 }
 
 ############################################################################################
 
 # running the functions
 
-Y=generateY(n,sigma,beta,X)
+Y=generateY(X, beta, sigma, seed = 5832652)
 Y
 beta_LS=calculateBeta(Y,X)
 beta_LS
